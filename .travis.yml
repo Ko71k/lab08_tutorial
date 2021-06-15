@@ -17,3 +17,8 @@ addons:
       - cmake
       - cmake-data
       - mingw-w64
+services:
+- docker<ESC>
+jVGdo
+script:
+- docker build -t logger .<ESC>
