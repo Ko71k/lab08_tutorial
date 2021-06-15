@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/rogopl/Rogopl/workspace/projects/lab03/lab03/solver_application/solver_lib/solver.cpp
+solver.h
+/home/rogopl/Rogopl/workspace/projects/lab03/lab03/solver_application/solver_lib/solver.h
+cmath
+-
+math.h
+-
+stdexcept
+-
+
+/home/rogopl/Rogopl/workspace/projects/lab03/lab03/solver_application/solver_lib/solver.h
+

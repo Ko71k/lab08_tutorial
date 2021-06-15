@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/rogopl/travis/build/Rogopl/lab04/hello_world_application/formatter_ex_lib/formatter_ex.cpp
+formatter_ex.h
+/home/rogopl/travis/build/Rogopl/lab04/hello_world_application/formatter_ex_lib/formatter_ex.h
+formatter.h
+/home/rogopl/travis/build/Rogopl/lab04/hello_world_application/formatter_ex_lib/formatter.h
+
+/home/rogopl/travis/build/Rogopl/lab04/hello_world_application/formatter_ex_lib/formatter_ex.h
+string
+-
+iostream
+-
+
+formatter_ex_lib/formatter_lib/formatter.h
+string
+-
+

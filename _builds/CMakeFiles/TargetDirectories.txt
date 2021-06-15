@@ -1,0 +1,10 @@
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/install/strip.dir
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/install.dir
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/list_install_components.dir
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/rebuild_cache.dir
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/edit_cache.dir
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/test.dir
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/check.dir
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/install/local.dir
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/demo.dir
+/home/ko71k/Desktop/ko71k/workspace/projects/lab7_tutorial/_builds/CMakeFiles/print.dir
