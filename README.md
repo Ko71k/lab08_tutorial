@@ -1,123 +1,139 @@
-# lab07_tutorial
-[![Build Status](https://travis-ci.com/Ko71k/lab07_tutorial.svg?branch=master)](https://travis-ci.com/Ko71k/lab07_tutorial)
-## Laboratory work VII
+# lab08_tutorial
+[![Build Status](https://travis-ci.com/Ko71k/lab08_tutorial.svg?branch=master)](https://travis-ci.com/Ko71k/lab08_tutorial)
 
-Данная лабораторная работа посвещена изучению систем управления пакетами на примере **Hunter**
-
-## Tasks
-
-- [ ] 1. Создать публичный репозиторий с названием **lab07** на сервисе **GitHub**
-- [ ] 2. Выполнить инструкцию учебного материала
-- [ ] 3. Ознакомиться со ссылками учебного материала
-- [ ] 4. Составить отчет и отправить ссылку личным сообщением в **Slack**
-
-## Tutorial
-
-```sh
-$ export GITHUB_USERNAME=<имя_пользователя>
-$ alias gsed=sed
 ```
-
-```sh
+export GITHUB_USERNAME=ko71k
+```
+Рабочая папка:
+```
 $ cd ${GITHUB_USERNAME}/workspace
 $ pushd .
 $ source scripts/activate
 ```
-
-```sh
-$ git clone https://github.com/${GITHUB_USERNAME}/lab06 projects/lab07
-$ cd projects/lab07
+Клонирование репозитория:
+```
+$ git clone https://github.com/${GITHUB_USERNAME}/lab07_tutorial lab08_tutorial
+$ cd lab08_tutorial
+$ git submodule update --init
 $ git remote remove origin
-$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab07
+$ git remote add origin https://github.com/${GITHUB_USERNAME}/lab08_tutorial
 ```
-
-```sh
-$ mkdir -p cmake
-$ wget https://raw.githubusercontent.com/cpp-pm/gate/master/cmake/HunterGate.cmake -O cmake/HunterGate.cmake
-$ gsed -i '/cmake_minimum_required(VERSION 3.4)/a\
-
-include("cmake/HunterGate.cmake")
-HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.251.tar.gz"
-    SHA1 "5659b15dc0884d4b03dbd95710e6a1fa0fc3258d"
-)
-' CMakeLists.txt
+Создание докера у указывание базового образа:
 ```
-
-```sh
-$ git rm -rf third-party/gtest
-$ gsed -i '/set(PRINT_VERSION_STRING "v\${PRINT_VERSION}")/a\
-
-hunter_add_package(GTest)
-find_package(GTest CONFIG REQUIRED)
-' CMakeLists.txt
-$ gsed -i 's/add_subdirectory(third-party/gtest)//' CMakeLists.txt
-$ gsed -i 's/gtest_main/GTest::main/' CMakeLists.txt
-```
-
-```sh
-$ cmake -H. -B_builds -DBUILD_TESTS=ON
-$ cmake --build _builds
-$ cmake --build _builds --target test
-$ ls -la $HOME/.hunter
-```
-Установка хантера:
-```sh
-$ git clone https://github.com/cpp-pm/hunter $HOME/projects/hunter
-$ export HUNTER_ROOT=$HOME/projects/hunter
-$ rm -rf _builds
-$ cmake -H. -B_builds -DBUILD_TESTS=ON
-$ cmake --build _builds
-$ cmake --build _builds --target test
-```
-Просмотр версий, создание каталога и установка версии gtest:
-```sh
-$ cat $HUNTER_ROOT/cmake/configs/default.cmake | grep GTest
-$ cat $HUNTER_ROOT/cmake/projects/GTest/hunter.cmake
-$ mkdir cmake/Hunter
-$ cat > cmake/Hunter/config.cmake <<EOF
-hunter_config(GTest VERSION 1.7.0-hunter-9)
+$ cat > Dockerfile <<EOF
+FROM ubuntu:18.04
 EOF
-# add LOCAL in HunterGate function
 ```
-
-```sh
-$ mkdir demo
-$ cat > demo/main.cpp <<EOF
-#include <print.hpp>
-
-#include <cstdlib>
-
-int main(int argc, char* argv[])
-{
-  const char* log_path = std::getenv("LOG_PATH");
-  if (log_path == nullptr)
-  {
-    std::cerr << "undefined environment variable: LOG_PATH" << std::endl;
-    return 1;
-  }
-  std::string text;
-  while (std::cin >> text)
-  {
-    std::ofstream out{log_path, std::ios_base::app};
-    print(text, out);
-    out << std::endl;
-  }
-}
+Установка через докер
+```
+$ cat >> Dockerfile <<EOF
+RUN apt update
+RUN apt install -yy gcc g++ cmake
 EOF
-
-$ gsed -i '/endif()/a\
-
-add_executable(demo ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp)
-target_link_libraries(demo print)
-install(TARGETS demo RUNTIME DESTINATION bin)
-' CMakeLists.txt
 ```
-Добавление подмодуля polly:
-```sh
-$ mkdir tools
-$ git submodule add https://github.com/ruslo/polly tools/polly
-$ tools/polly/bin/polly.py --test
-$ tools/polly/bin/polly.py --install
-$ tools/polly/bin/polly.py --toolchain clang-cxx14
+Копирование файла каталога и выбор рабочей папки докера:
 ```
+$ cat >> Dockerfile <<EOF
+
+COPY . print/
+WORKDIR print
+EOF
+```
+cmake в докере:
+```
+RUN cmake -H. -B_build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=_install
+RUN cmake --build _build
+RUN cmake --build _build --target install
+EOF
+```
+Установка значения LOG_PATH:
+```
+$ cat >> Dockerfile <<EOF
+ENV LOG_PATH /home/logs/log.txt
+EOF
+```
+Передача докеру директории с файлами:
+```
+$ cat >> Dockerfile <<EOF
+VOLUME /home/logs
+EOF
+```
+Переход к папке:
+```
+$ cat >> Dockerfile <<EOF
+WORKDIR _install/bin
+EOF
+```
+Создание точки входа:
+```
+$ cat >> Dockerfile <<EOF
+ENTRYPOINT ./demo
+EOF
+```
+Command docker not found, значит нужно установаить:
+```
+sudo apt install docker.io #version 20.10.2-0ubuntu1~20.04.2
+```
+После этого при вводе docker build -t logger . не даёт разрешения, значит нужно с sudo:
+```
+sudo docker build -t logger .
+```
+Обращение к докеру:
+```
+sudo docker images
+```
+Создание папки logs и интерактивного процесса logger
+```
+$ mkdir logs
+$ sudo docker run -it -v "$(pwd)/logs/:/home/logs/" logger
+text1
+text2
+text3
+<C-D>
+```
+выход через ^C
+
+Вывод информации о контейнере:
+```
+sudo docker inspect logger
+```
+Проверка файлов:
+```
+cat logs/log.txt
+```
+```
+gsed -i 's/lab07/lab08/g' README.md
+```
+Изменение файла .travis.yml
+```
+$ cat >>.travis.yml <<EOF
+/lang<CR>o
+services:
+- docker<ESC>
+jVGdo
+script:
+- docker build -t logger
+EOF
+```
+Загрузка на гитхаб:
+```
+$ git add Dockerfile
+$ git add .travis.yml
+$ git commit -m"adding Dockerfile"
+$ git push origin master
+```
+Проверка файла:
+```
+$ travis enable
+$ travis lint
+```
+После этой строчки вышла ошибка, и нужно было исправить файл .travis.yml, чтобы в нём было только 
+```
+/lang<CR>o
+services:
+- docker<ESC>
+jVGdo
+script:
+- docker build -t logger
+```
+После этого всё заработало.
