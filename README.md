@@ -61,7 +61,7 @@ $ cmake --build _builds
 $ cmake --build _builds --target test
 $ ls -la $HOME/.hunter
 ```
-
+Установка хантера:
 ```sh
 $ git clone https://github.com/cpp-pm/hunter $HOME/projects/hunter
 $ export HUNTER_ROOT=$HOME/projects/hunter
@@ -70,7 +70,7 @@ $ cmake -H. -B_builds -DBUILD_TESTS=ON
 $ cmake --build _builds
 $ cmake --build _builds --target test
 ```
-
+Просмотр версий, создание каталога и установка версии gtest:
 ```sh
 $ cat $HUNTER_ROOT/cmake/configs/default.cmake | grep GTest
 $ cat $HUNTER_ROOT/cmake/projects/GTest/hunter.cmake
@@ -113,39 +113,11 @@ target_link_libraries(demo print)
 install(TARGETS demo RUNTIME DESTINATION bin)
 ' CMakeLists.txt
 ```
-
+Добавление подмодуля polly:
 ```sh
 $ mkdir tools
 $ git submodule add https://github.com/ruslo/polly tools/polly
 $ tools/polly/bin/polly.py --test
 $ tools/polly/bin/polly.py --install
 $ tools/polly/bin/polly.py --toolchain clang-cxx14
-```
-
-## Report
-
-```sh
-$ popd
-$ export LAB_NUMBER=07
-$ git clone https://github.com/tp-labs/lab${LAB_NUMBER} tasks/lab${LAB_NUMBER}
-$ mkdir reports/lab${LAB_NUMBER}
-$ cp tasks/lab${LAB_NUMBER}/README.md reports/lab${LAB_NUMBER}/REPORT.md
-$ cd reports/lab${LAB_NUMBER}
-$ edit REPORT.md
-$ gist REPORT.md
-```
-
-## Homework
-
-### Задание
-1. Создайте cвой hunter-пакет.
-
-## Links
-
-- [Create Hunter package](https://docs.hunter.sh/en/latest/creating-new/create.html)
-- [Custom Hunter config](https://github.com/ruslo/hunter/wiki/example.custom.config.id)
-- [Polly](https://github.com/ruslo/polly)
-
-```
-Copyright (c) 2015-2021 The ISC Authors
 ```
